@@ -59,6 +59,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="zengyiyang &lt;zyy3865@outlook.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1YQiPkcKq5xj7SrGAAav9MZ5A9E" />
@@ -140,8 +145,16 @@
       <updated>1582881196285</updated>
       <workItem from="1582881197323" duration="9476000" />
       <workItem from="1582958115208" duration="29026000" />
-      <workItem from="1583045450338" duration="22890000" />
+      <workItem from="1583045450338" duration="23136000" />
     </task>
+    <task id="LOCAL-00001" summary="Start refactoring projects with typescript">
+      <created>1583076343611</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1583076343611</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <option name="searchClosedTasks" value="true" />
     <servers />
   </component>
@@ -160,5 +173,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Start refactoring projects with typescript" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start refactoring projects with typescript" />
   </component>
 </project>
