@@ -1,12 +1,34 @@
 import {ILocale} from "../interfaces/ILocale";
 
 const zh_CN: ILocale = {
-    intl_test: "测试",
-    intl_drawer_button_tip: '打开 | 关闭抽屉',
-    intl_left_drawer_bookmark: '书签管理',
-    intl_snackbar_default_message: '这是 Snackbar 的默认信息!!!',
-    intl_left_drawer_tag: '标签管理',
-    intl_bookmark_container_title: '书签管理',
+    common: {
+        snackbarDefaultMessage: "这是 Snackbar 的默认信息!!!",
+        drawerButtonTip: "打开 | 关闭抽屉",
+        leftDrawerBookmark: "书签管理",
+        leftDrawerTag: "标签管理",
+        resetButtonValue: "确认",
+        cancelButtonValue: "取消",
+        submitButtonValue: "重置",
+        addFabTip: "添加",
+        getServerUrlFail: "获取服务器地址失败",
+        addSuccess: "添加成功",
+        createTime: "创建时间",
+        lastUpdateTime: "最近修改时间",
+        action: "操作",
+    },
+    bookmark: {
+        title: "书签管理",
+    },
+    tag: {
+        title: "标签管理",
+        addDialogTitle: "添加标签",
+        tagNameLabel: "标签名*",
+        tagName: "标签名",
+        tagDescription: "标签描述",
+        tagNameValidateErrorTip: "标签名不能为空或包含 ,(逗号)",
+        addFail: "标签添加失败",
+        duplicatedError: "标签添加失败, 标签名已存在",
+    }
 };
 
 export default zh_CN;

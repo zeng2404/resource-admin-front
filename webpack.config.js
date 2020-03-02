@@ -1,11 +1,15 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const GenerateAssetPlugin = require('generate-asset-webpack-plugin')
+const serverConfig = require('./serverConfig.json')
+const createJson = function(compilation) {
+    return JSON.stringify(serverConfig);
+};
 
 module.exports = {
     entry: {
         app: ["babel-polyfill", "./src/index.tsx"]
-        // app: ['./src/index.tsx'],
-        // vendor: ['react', 'react-dom']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -51,6 +55,13 @@ module.exports = {
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/index.html"
+        }),
+        new CleanWebpackPlugin(),
+        new GenerateAssetPlugin({
+            filename: 'serverConfig.json',
+            fn: (compilation, cb) => {
+                cb(null, createJson(compilation));
+            }
         })
     ]
 };

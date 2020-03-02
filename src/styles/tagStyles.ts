@@ -1,8 +1,8 @@
 import {createStyles, Theme} from "@material-ui/core";
 import {blue} from "@material-ui/core/colors";
 
-const bookmarkStyles = (theme: Theme) => createStyles({
-    bookmarkBox: {
+const tagStyles = (theme: Theme) => createStyles({
+    tagBox: {
         padding: 20,
     },
     addButton: {
@@ -12,8 +12,15 @@ const bookmarkStyles = (theme: Theme) => createStyles({
         '&:hover': {
             backgroundColor: blue[700],
         },
-    }
-
+    },
+    textField: {
+        width: '90%',
+        marginLeft: '5%',
+        marginRight: '5%'
+    },
+    dialogAction: {
+        marginBottom: 10,
+    },
 });
 
-export default bookmarkStyles;
+export default tagStyles;

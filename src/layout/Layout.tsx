@@ -24,6 +24,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {FormattedMessage} from "react-intl";
 import {inject, observer} from "mobx-react";
 import IStore from "../interfaces/IStore";
+import CommonStore from "../stores/commonStore";
 
 const drawerWidth = 200;
 
@@ -99,138 +100,135 @@ const styles = (theme: Theme) => createStyles({
     }
 })
 
-@inject("commonStore")
-@observer
-class Layout extends Component<IStore, object> {
+const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
 
-    render() {
-        const classes = this.props.classes;
+    const classes = props.classes;
 
-        const {
-            isLeftDrawerOpen,
-            localeDescriptionList,
-            currentLocaleChooseIndex,
-            localeChooseMenuVisibility,
-            localeChooseMenuAnchorEl
-        } = this.props.commonStore;
+    const {
+        isLeftDrawerOpen,
+        localeDescriptionList,
+        currentLocaleChooseIndex,
+        localeChooseMenuVisibility,
+        localeChooseMenuAnchorEl
+    } = props.commonStore;
 
-        const store = this.props.commonStore;
+    const store = props.commonStore;
 
-        return (
-            <div>
-                <AppBar position="fixed"
-                        className={clsx(classes.appBar, {
-                            [classes.appBarShift]: isLeftDrawerOpen
-                        })}
-                >
-                    <Toolbar>
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center"
-                        >
-                            <Grid item>
-                                <Tooltip placement={"bottom"} title={
-                                    <FormattedMessage id={"intl_drawer_button_tip"}/>
-                                }>
-                                    <IconButton className={clsx(classes.drawerButton, {
-                                        [classes.hide]: isLeftDrawerOpen,
-                                    })}
-                                                onClick={() => store.changeLeftDrawerOpenStatus(true)}
-                                    >
-                                        <Menu/>
-                                    </IconButton>
-                                </Tooltip>
-                            </Grid>
-                            <Grid item>
-                            </Grid>
-                            <Grid item>
-                                <div
-                                    onMouseOver={event => store.openLocaleChooseMenu(event.currentTarget)}
-                                    onMouseLeave={() => store.changeLocaleChooseMenuVisibilityStatus(false)}
+    return(
+        <div>
+            <AppBar position="fixed"
+                    className={clsx(classes.appBar, {
+                        [classes.appBarShift]: isLeftDrawerOpen
+                    })}
+            >
+                <Toolbar>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="space-between"
+                        alignItems="center"
+                    >
+                        <Grid item>
+                            <Tooltip placement={"bottom"} title={
+                                <FormattedMessage id={"intl_drawer_button_tip"}/>
+                            }>
+                                <IconButton className={clsx(classes.drawerButton, {
+                                    [classes.hide]: isLeftDrawerOpen,
+                                })}
+                                            onClick={() => store.changeLeftDrawerOpenStatus(true)}
                                 >
-                                    <Button className={classes.localeButton}>
-                                        <Translate className={classes.buttonLeftIcon}/>
-                                        {localeDescriptionList[currentLocaleChooseIndex]}
-                                    </Button>
-                                    <Popper open={localeChooseMenuVisibility} anchorEl={localeChooseMenuAnchorEl}
-                                            placement={'bottom'} className={classes.localeChoosePopper}>
-                                        <Paper>
-                                            <MenuList>
-                                                {
-                                                    localeDescriptionList.map((value, index) => {
-                                                        return (
-                                                            <MenuItem key={'locale-' + index}
-                                                                      onClick={() => store.changeCurrentLocaleChooseIndex(index)}>
-                                                                <ListItemText>{value}</ListItemText>
-                                                            </MenuItem>
-                                                        )
-                                                    })
-                                                }
-                                            </MenuList>
-                                        </Paper>
-                                    </Popper>
-                                </div>
-                            </Grid>
+                                    <Menu/>
+                                </IconButton>
+                            </Tooltip>
                         </Grid>
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                    variant={"permanent"}
-                    className={clsx(classes.drawer, {
+                        <Grid item>
+                        </Grid>
+                        <Grid item>
+                            <div
+                                onMouseOver={event => store.openLocaleChooseMenu(event.currentTarget)}
+                                onMouseLeave={() => store.changeLocaleChooseMenuVisibilityStatus(false)}
+                            >
+                                <Button className={classes.localeButton}>
+                                    <Translate className={classes.buttonLeftIcon}/>
+                                    {localeDescriptionList[currentLocaleChooseIndex]}
+                                </Button>
+                                <Popper open={localeChooseMenuVisibility} anchorEl={localeChooseMenuAnchorEl}
+                                        placement={'bottom'} className={classes.localeChoosePopper}>
+                                    <Paper>
+                                        <MenuList>
+                                            {
+                                                localeDescriptionList.map((value, index) => {
+                                                    return (
+                                                        <MenuItem key={'locale-' + index}
+                                                                  onClick={() => store.changeCurrentLocaleChooseIndex(index)}>
+                                                            <ListItemText>{value}</ListItemText>
+                                                        </MenuItem>
+                                                    )
+                                                })
+                                            }
+                                        </MenuList>
+                                    </Paper>
+                                </Popper>
+                            </div>
+                        </Grid>
+                    </Grid>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                variant={"permanent"}
+                className={clsx(classes.drawer, {
+                    [classes.drawerOpen]: isLeftDrawerOpen,
+                    [classes.drawerClose]: !isLeftDrawerOpen,
+                })}
+                classes={{
+                    paper: clsx({
                         [classes.drawerOpen]: isLeftDrawerOpen,
                         [classes.drawerClose]: !isLeftDrawerOpen,
-                    })}
-                    classes={{
-                        paper: clsx({
-                            [classes.drawerOpen]: isLeftDrawerOpen,
-                            [classes.drawerClose]: !isLeftDrawerOpen,
-                        })
-                    }}
-                    open={isLeftDrawerOpen}
-                >
-                    <div className={classes.toolbar}>
-                        <IconButton>
-                            {
-                                isLeftDrawerOpen?
-                                    <ChevronLeft
-                                        onClick={() => store.changeLeftDrawerOpenStatus(false)}
-                                    />
-                                    :
-                                    <div></div>
-                            }
-                        </IconButton>
-                    </div>
-                    <Divider/>
-                    <HashRouter>
-                        <List>
-                            <Link to={'/test'} className={classes.listItem}>
-                                <ListItem button key={'left-drawer-bookmark'} >
-                                    <ListItemIcon>
-                                        <Bookmark/>
-                                    </ListItemIcon>
-                                    <ListItemText className={classes.listItemText}>
-                                        <FormattedMessage id={"intl_left_drawer_bookmark"}/>
-                                    </ListItemText>
-                                </ListItem>
-                            </Link>
-                            <Link to={'/second'} className={classes.listItem}>
-                                <ListItem button key={'left-drawer-tag'} >
-                                    <ListItemIcon>
-                                        <Label/>
-                                    </ListItemIcon>
-                                    <ListItemText className={classes.listItemText}>
-                                        <FormattedMessage id={"intl_left_drawer_tag"} />
-                                    </ListItemText>
-                                </ListItem>
-                            </Link>
-                        </List>
-                    </HashRouter>
-                </Drawer>
-            </div>
-        )
-    }
-}
+                    })
+                }}
+                open={isLeftDrawerOpen}
+            >
+                <div className={classes.toolbar}>
+                    <IconButton>
+                        {
+                            isLeftDrawerOpen?
+                                <ChevronLeft
+                                    onClick={() => store.changeLeftDrawerOpenStatus(false)}
+                                />
+                                :
+                                <div></div>
+                        }
+                    </IconButton>
+                </div>
+                <Divider/>
+                <HashRouter>
+                    <List>
+                        <Link to={'/bookmark'} className={classes.listItem}>
+                            <ListItem button key={'left-drawer-bookmark'} >
+                                <ListItemIcon>
+                                    <Bookmark/>
+                                </ListItemIcon>
+                                <ListItemText className={classes.listItemText}>
+                                    <FormattedMessage id={"intl_left_drawer_bookmark"}/>
+                                </ListItemText>
+                            </ListItem>
+                        </Link>
+                        <Link to={'/tag'} className={classes.listItem}>
+                            <ListItem button key={'left-drawer-tag'} >
+                                <ListItemIcon>
+                                    <Label/>
+                                </ListItemIcon>
+                                <ListItemText className={classes.listItemText}>
+                                    <FormattedMessage id={"intl_left_drawer_tag"} />
+                                </ListItemText>
+                            </ListItem>
+                        </Link>
+                    </List>
+                </HashRouter>
+            </Drawer>
+        </div>
+    )
+};
+
 
 export default withStyles(styles)(Layout);

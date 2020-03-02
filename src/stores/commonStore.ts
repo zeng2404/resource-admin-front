@@ -1,6 +1,5 @@
 import {action, observable} from "mobx";
-
-type infoLevel = "success" | "info" | "error" | "warning";
+import axios from "axios";
 
 class CommonStore {
     @observable
@@ -14,7 +13,7 @@ class CommonStore {
     @observable
     readonly snackbarAutoHiddenTime = 6000;
     @observable
-    snackbarInfoLevel: infoLevel = "success";
+    snackbarInfoLevel: "success" | "info" | "error" | "warning" = "success";
     @observable
     snackbarMessageIntlId: string = "intl_snackbar_default_message";
     @observable
@@ -23,6 +22,27 @@ class CommonStore {
     localeChooseMenuVisibility:boolean = false;
     @observable
     localeChooseMenuAnchorEl: any = null;
+    @observable
+    serverUrl: string = "http://localhost:7777";
+
+    @action
+    setServerUrl(url: string) {
+        this.serverUrl = url;
+    }
+
+    @action
+    async initialServerUrl() {
+        axios.get("serverConfig.json")
+            .then(response => {
+                this.setServerUrl(response.data.serverUrl);
+            })
+            .catch(error => {
+                console.error(error);
+                this.setSnackbarMessage("intl_get_serverUrl_fail", "error");
+            })
+
+    }
+
 
     @action
     changeLocaleChooseMenuVisibilityStatus(isVisible: boolean) {
@@ -46,13 +66,14 @@ class CommonStore {
     }
 
     @action
-    changeSnackbarInfoLevel(infoLevel: infoLevel) {
+    changeSnackbarInfoLevel(infoLevel: "success" | "info" | "error" | "warning") {
         this.snackbarInfoLevel = infoLevel;
     }
 
     @action
-    SetSnackbarMessageIntlId(intlId: string) {
+    setSnackbarMessage(intlId: string, infoLvel: "success" | "info" | "error" | "warning") {
         this.snackbarMessageIntlId = intlId;
+        this.snackbarInfoLevel = infoLvel;
         this.snackbarVisibility = true;
     }
 

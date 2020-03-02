@@ -6,7 +6,7 @@ import {withStyles} from '@material-ui/core/styles';
 
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import clsx from 'clsx';
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, useIntl} from "react-intl";
 
 type infoLevel = "success" | "info" | "error" | "warning";
 
@@ -56,6 +56,7 @@ interface MySnackbarContentProps {
 const MySnackbarContent: FunctionComponent<MySnackbarContentProps> = (props: MySnackbarContentProps) => {
     const {infoLevel, messageIntlId, onClose, classes} = props;
     const Icon = variantIcon[infoLevel];
+
     return (
         <SnackbarContent
             className={classes[infoLevel]}

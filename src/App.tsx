@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import routes from "./route";
-import {Route, Redirect, Switch, HashRouter} from "react-router-dom";
+import {HashRouter, Route, Switch} from "react-router-dom";
 import IRouteComponent from "./interfaces/IRouteComponent";
-import {FormattedMessage, IntlProvider} from "react-intl";
-import {createStyles, Snackbar, Theme} from "@material-ui/core";
+import {IntlProvider} from "react-intl";
+import {Snackbar} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import getStyle from "./styles";
 import zh_CN from "./locale/zh_CN";
 import en_US from "./locale/en_US";
 import {ILocale} from "./interfaces/ILocale";
@@ -14,10 +13,16 @@ import {inject, observer} from "mobx-react";
 import IStore from "./interfaces/IStore";
 import MySnackbarContent from "./components/MySnackbarContent";
 import Layout from "./layout/Layout";
+import {flattenMessages} from "./utils";
 
 @inject("commonStore")
 @observer
 class App extends Component<IStore, object> {
+    componentDidMount(): void {
+        console.log(this.props);
+        this.props.commonStore.initialServerUrl();
+    }
+
     render() {
         const getLocale = (language: string): ILocale => {
             switch (language.split("-")[0]) {
@@ -52,8 +57,8 @@ class App extends Component<IStore, object> {
         return (
             <div className={classes.rootBox}>
                 <IntlProvider locale={localeList[currentLocaleChooseIndex]}
-                              messages={getLocale(localeList[currentLocaleChooseIndex])}>
-                    <Layout{...other}/>
+                              messages={flattenMessages(getLocale(localeList[currentLocaleChooseIndex]))}>
+                    <Layout {...other}/>
                     <div className={classes.contentBox} style={{marginLeft: isLeftDrawerOpen ? 210 : 58}}>
                         <Snackbar open={snackbarVisibility}
                                   anchorOrigin={{vertical: 'top', horizontal: 'right'}}
@@ -72,8 +77,7 @@ class App extends Component<IStore, object> {
                             <Switch>
                                 {
                                     routes.map((route: IRouteComponent, index: number) => (
-                                        <Route exact key={route.key} path={route.path}
-                                               component={withStyles(getStyle(route.styleFileName))(route.component)}/>
+                                        <Route exact {...route}/>
                                     ))
                                 }
                             </Switch>
