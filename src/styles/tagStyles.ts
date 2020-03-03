@@ -21,6 +21,10 @@ const tagStyles = (theme: Theme) => createStyles({
     dialogAction: {
         marginBottom: 10,
     },
+    tooltipLargeWidth: {
+        maxWidth: 1200,
+        fontSize: 17
+    },
 });
 
 export default tagStyles;

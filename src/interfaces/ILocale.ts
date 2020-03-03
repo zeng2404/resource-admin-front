@@ -27,6 +27,7 @@ export interface TagIntlProps {
     tagNameValidateErrorTip: string;
     addFail: string;
     duplicatedError: string;
+    getDataFail: string;
 
 }
 export interface ILocale extends Record<string, any>{

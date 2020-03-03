@@ -1,12 +1,13 @@
-import React, {FC, FunctionComponent} from "react";
-import {CheckCircle, Warning, Error, Info, Close,} from "@material-ui/icons";
-import {amber, teal, lightBlue} from '@material-ui/core/colors';
+import React, {FunctionComponent, useEffect} from "react";
+import {CheckCircle, Close, Error, Info, Warning,} from "@material-ui/icons";
+import {amber, lightBlue, teal} from '@material-ui/core/colors';
 import {createStyles, IconButton, Theme} from "@material-ui/core";
 import {withStyles} from '@material-ui/core/styles';
 
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import clsx from 'clsx';
 import {FormattedMessage, useIntl} from "react-intl";
+import {getIntlMessage} from "../utils";
 
 type infoLevel = "success" | "info" | "error" | "warning";
 
@@ -56,26 +57,30 @@ interface MySnackbarContentProps {
 const MySnackbarContent: FunctionComponent<MySnackbarContentProps> = (props: MySnackbarContentProps) => {
     const {infoLevel, messageIntlId, onClose, classes} = props;
     const Icon = variantIcon[infoLevel];
+    const intl = useIntl();
+    const [message] = getIntlMessage(intl, [messageIntlId]);
+
+    useEffect(() => {
+        console.log("intlId: " + messageIntlId);
+    }, [messageIntlId]);
 
     return (
-        <SnackbarContent
-            className={classes[infoLevel]}
-            aria-describedby="client-snackbar"
-            message={
-                <span id="client-snackbar" className={classes.message}>
+            <SnackbarContent
+                className={classes[infoLevel]}
+                aria-describedby="client-snackbar"
+                message={
+                    <span id="client-snackbar" className={classes.message}>
                         <Icon className={clsx(classes.icon, classes.iconVariant)}/>
-                    {
-                        <FormattedMessage id={messageIntlId}/>
-                    }
+                        {message}
                     </span>
-            }
-            action={[
-                <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
-                    <Close className={classes.icon}/>
-                </IconButton>,
-            ]}
-        >
-        </SnackbarContent>
+                }
+                action={[
+                    <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+                        <Close className={classes.icon}/>
+                    </IconButton>,
+                ]}
+            >
+            </SnackbarContent>
     )
 };
 

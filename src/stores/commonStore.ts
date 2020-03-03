@@ -15,11 +15,11 @@ class CommonStore {
     @observable
     snackbarInfoLevel: "success" | "info" | "error" | "warning" = "success";
     @observable
-    snackbarMessageIntlId: string = "intl_snackbar_default_message";
+    snackbarMessageIntlId: string = "common.snackbarDefaultMessage";
     @observable
     isLeftDrawerOpen: boolean = false;
     @observable
-    localeChooseMenuVisibility:boolean = false;
+    localeMenuVisibility: boolean = false;
     @observable
     localeChooseMenuAnchorEl: any = null;
     @observable
@@ -28,6 +28,11 @@ class CommonStore {
     @action
     setServerUrl(url: string) {
         this.serverUrl = url;
+    }
+
+    @action
+    setLocaleMenuVisibility(isVisible: boolean) {
+        this.localeMenuVisibility = isVisible;
     }
 
     @action
@@ -44,15 +49,11 @@ class CommonStore {
     }
 
 
-    @action
-    changeLocaleChooseMenuVisibilityStatus(isVisible: boolean) {
-        this.localeChooseMenuVisibility = isVisible;
-    }
 
     @action
     openLocaleChooseMenu(element: EventTarget & HTMLDivElement) {
         this.localeChooseMenuAnchorEl = element;
-        this.localeChooseMenuVisibility = true;
+        this.setLocaleMenuVisibility(true);
     }
 
     @action

@@ -2,33 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a60f342-770c-446e-b767-6f2558a6ac28" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/serverConfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/constants/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Tag.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stores/tagStore.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/styles/tagStyles.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/types/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MySnackbarContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MySnackbarContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/interfaces/ILocale.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/ILocale.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/IRouteComponent.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/IRouteComponent.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/IStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/IStore.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/locale/en_US.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/locale/en_US.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/locale/zh_CN.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/locale/zh_CN.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Bookmark.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Bookmark.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Tag.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Tag.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stores/commonStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/stores/commonStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stores/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/stores/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/bookmarkStyles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/bookmarkStyles.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stores/tagStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/stores/tagStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/tagStyles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/tagStyles.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/index.ts" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,6 +43,11 @@
   </component>
   <component name="ProjectId" id="1YQiPkcKq5xj7SrGAAav9MZ5A9E" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -67,6 +61,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
@@ -77,18 +72,6 @@
       <recent name="$PROJECT_DIR$/src/types" />
       <recent name="$PROJECT_DIR$/src/components/Button" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="npm.dev">
     <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
@@ -136,6 +119,7 @@
       <workItem from="1583108680229" duration="24207000" />
       <workItem from="1583150288202" duration="8639000" />
       <workItem from="1583160611286" duration="4156000" />
+      <workItem from="1583202838940" duration="15471000" />
     </task>
     <task id="LOCAL-00001" summary="Start refactoring projects with typescript">
       <created>1583076343611</created>
@@ -174,5 +158,83 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Start refactoring projects with typescript" />
     <option name="LAST_COMMIT_MESSAGE" value="Start refactoring projects with typescript" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="865" y="167" key="CommitChangelistDialog2" timestamp="1583229353981">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="865" y="167" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1583229353981" />
+    <state width="1455" height="289" key="GridCell.Tab.0.bottom" timestamp="1583225972824">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="289" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583225972824" />
+    <state width="1455" height="289" key="GridCell.Tab.0.center" timestamp="1583225972824">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="289" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583225972824" />
+    <state width="1455" height="289" key="GridCell.Tab.0.left" timestamp="1583225972824">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="289" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583225972824" />
+    <state width="1455" height="289" key="GridCell.Tab.0.right" timestamp="1583225972824">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="289" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583225972824" />
+    <state width="1455" height="14" key="GridCell.Tab.1.bottom" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.1.center" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.1.left" timestamp="1583202823618">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823618" />
+    <state width="1455" height="14" key="GridCell.Tab.1.right" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.2.bottom" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.2.center" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.2.left" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.2.right" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.3.bottom" timestamp="1583202823620">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.3.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823620" />
+    <state width="1455" height="14" key="GridCell.Tab.3.center" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.3.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.3.left" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.3.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state width="1455" height="14" key="GridCell.Tab.3.right" timestamp="1583202823619">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1455" height="14" key="GridCell.Tab.3.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583202823619" />
+    <state x="487" y="161" key="SettingsEditor" timestamp="1583200168818">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="487" y="161" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1583200168818" />
+    <state x="634" y="269" key="run.anything.popup" timestamp="1583204010074">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="634" y="269" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1583204010074" />
   </component>
 </project>

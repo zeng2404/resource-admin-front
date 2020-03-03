@@ -6,9 +6,9 @@ const zh_CN: ILocale = {
         drawerButtonTip: "打开 | 关闭抽屉",
         leftDrawerBookmark: "书签管理",
         leftDrawerTag: "标签管理",
-        resetButtonValue: "确认",
+        resetButtonValue: "重置",
         cancelButtonValue: "取消",
-        submitButtonValue: "重置",
+        submitButtonValue: "确认",
         addFabTip: "添加",
         getServerUrlFail: "获取服务器地址失败",
         addSuccess: "添加成功",
@@ -27,7 +27,8 @@ const zh_CN: ILocale = {
         tagDescription: "标签描述",
         tagNameValidateErrorTip: "标签名不能为空或包含 ,(逗号)",
         addFail: "标签添加失败",
-        duplicatedError: "标签添加失败, 标签名已存在",
+        duplicatedError: "标签添加失败,标签名已存在",
+        getDataFail: "获取标签数据失败",
     }
 };
 

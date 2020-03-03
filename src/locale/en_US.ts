@@ -27,7 +27,8 @@ const en_US: ILocale = {
         tagDescription: "Tag Description",
         tagNameValidateErrorTip: "tag name cannot be empty or contains ,(comma)",
         addFail: "Adding labels failed",
-        duplicatedError: "Adding labels failed, Tag Name already exist",
+        duplicatedError: "Add failed,Tag Name already exist",
+        getDataFail: "Get Tag Data Fail",
     }
 
 };

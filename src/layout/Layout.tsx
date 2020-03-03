@@ -1,30 +1,32 @@
-import React, {Component} from "react";
+import React from "react";
 import clsx from "clsx";
 import {
     AppBar,
-    Toolbar,
-    Tooltip,
-    IconButton,
     Button,
-    Popper,
-    MenuList,
-    Paper,
-    MenuItem,
-    ListItemText,
-    Grid,
-    Drawer,
+    createStyles,
     Divider,
+    Drawer,
+    Grid,
+    IconButton,
     List,
     ListItem,
-    ListItemIcon, Theme, createStyles
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
+    Theme,
+    Toolbar,
+    Tooltip
 } from "@material-ui/core";
 import {HashRouter, Link} from 'react-router-dom'
-import {Translate, Menu, ChevronLeft, Bookmark, Label} from "@material-ui/icons";
+import {Bookmark, ChevronLeft, Label, Menu, Translate} from "@material-ui/icons";
 import {withStyles} from '@material-ui/core/styles';
-import {FormattedMessage} from "react-intl";
+import {useIntl} from "react-intl";
 import {inject, observer} from "mobx-react";
 import IStore from "../interfaces/IStore";
-import CommonStore from "../stores/commonStore";
+import {getIntlMessage} from "../utils";
 
 const drawerWidth = 200;
 
@@ -98,9 +100,16 @@ const styles = (theme: Theme) => createStyles({
         color: 'rgba(0, 0, 0, 0.87)',
         fontWeight: 'bold',
     }
-})
+});
 
-const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
+const Layout: React.FunctionComponent<IStore> = (props: IStore) => {
+
+    const intl = useIntl();
+
+    const intlArray = ["common.drawerButtonTip", "common.leftDrawerBookmark", "common.leftDrawerTag"];
+
+    const [drawerButtonTip, leftDrawerBookmark, leftDrawerTag]: string[] =
+        getIntlMessage(intl, intlArray);
 
     const classes = props.classes;
 
@@ -108,13 +117,13 @@ const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
         isLeftDrawerOpen,
         localeDescriptionList,
         currentLocaleChooseIndex,
-        localeChooseMenuVisibility,
-        localeChooseMenuAnchorEl
+        localeChooseMenuAnchorEl,
+        localeMenuVisibility,
     } = props.commonStore;
 
     const store = props.commonStore;
 
-    return(
+    return (
         <div>
             <AppBar position="fixed"
                     className={clsx(classes.appBar, {
@@ -130,7 +139,7 @@ const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
                     >
                         <Grid item>
                             <Tooltip placement={"bottom"} title={
-                                <FormattedMessage id={"intl_drawer_button_tip"}/>
+                                drawerButtonTip
                             }>
                                 <IconButton className={clsx(classes.drawerButton, {
                                     [classes.hide]: isLeftDrawerOpen,
@@ -146,13 +155,13 @@ const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
                         <Grid item>
                             <div
                                 onMouseOver={event => store.openLocaleChooseMenu(event.currentTarget)}
-                                onMouseLeave={() => store.changeLocaleChooseMenuVisibilityStatus(false)}
+                                onMouseLeave={() => store.setLocaleMenuVisibility(false)}
                             >
                                 <Button className={classes.localeButton}>
                                     <Translate className={classes.buttonLeftIcon}/>
                                     {localeDescriptionList[currentLocaleChooseIndex]}
                                 </Button>
-                                <Popper open={localeChooseMenuVisibility} anchorEl={localeChooseMenuAnchorEl}
+                                <Popper open={localeMenuVisibility} anchorEl={localeChooseMenuAnchorEl}
                                         placement={'bottom'} className={classes.localeChoosePopper}>
                                     <Paper>
                                         <MenuList>
@@ -191,12 +200,12 @@ const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
                 <div className={classes.toolbar}>
                     <IconButton>
                         {
-                            isLeftDrawerOpen?
+                            isLeftDrawerOpen ?
                                 <ChevronLeft
                                     onClick={() => store.changeLeftDrawerOpenStatus(false)}
                                 />
                                 :
-                                <div></div>
+                                ""
                         }
                     </IconButton>
                 </div>
@@ -204,22 +213,22 @@ const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
                 <HashRouter>
                     <List>
                         <Link to={'/bookmark'} className={classes.listItem}>
-                            <ListItem button key={'left-drawer-bookmark'} >
+                            <ListItem button key={'left-drawer-bookmark'}>
                                 <ListItemIcon>
                                     <Bookmark/>
                                 </ListItemIcon>
                                 <ListItemText className={classes.listItemText}>
-                                    <FormattedMessage id={"intl_left_drawer_bookmark"}/>
+                                    {leftDrawerBookmark}
                                 </ListItemText>
                             </ListItem>
                         </Link>
                         <Link to={'/tag'} className={classes.listItem}>
-                            <ListItem button key={'left-drawer-tag'} >
+                            <ListItem button key={'left-drawer-tag'}>
                                 <ListItemIcon>
                                     <Label/>
                                 </ListItemIcon>
                                 <ListItemText className={classes.listItemText}>
-                                    <FormattedMessage id={"intl_left_drawer_tag"} />
+                                    {leftDrawerTag}
                                 </ListItemText>
                             </ListItem>
                         </Link>
@@ -230,5 +239,6 @@ const Layout:React.FunctionComponent<IStore> = (props: IStore) => {
     )
 };
 
+export default withStyles(styles)(inject("commonStore")(observer(Layout)));
 
-export default withStyles(styles)(Layout);
+
