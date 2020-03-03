@@ -95,7 +95,7 @@ export default class TagStore {
 
     @action
     changeTagSaveDialogVisibilityStatus(isVisible: boolean) {
-        if (isVisible === true) {
+        if (isVisible) {
             this.tagSaveDialogErrorArray = [];
         }
         this.tagSaveDialogVisibility = isVisible;
@@ -115,8 +115,8 @@ export default class TagStore {
                 const statusCode = response.data.statusCode;
                 if (statusCode === 200) {
                     stores.commonStore.setSnackbarMessage("common.deleteSuccess", "success");
-                    if(this.currentPageNumber !== 0 && this.currentPageNumber === (this.dataCount / this.pageSize)) {
-                        if(tagIds.length >= this.dataCount % this.pageSize) {
+                    if (this.currentPageNumber !== 0 && this.currentPageNumber === (this.dataCount / this.pageSize)) {
+                        if (tagIds.length >= this.dataCount % this.pageSize) {
                             this.currentPageNumber -= 1;
                         }
                     }
@@ -131,6 +131,7 @@ export default class TagStore {
             })
     }
 
+
     @action
     async updateTag(tag: TagUpdateRequestBody) {
         if (stringUtils.isNullOrEmpty(tag.tagName.trim()) ||
@@ -141,12 +142,12 @@ export default class TagStore {
         }
         else {
             if(this.currentHandleTag) {
-                const url = [stores.commonStore.serverUrl, this.path, this.currentHandleTag.id].join("/")
+                const url = [stores.commonStore.serverUrl, this.path, this.currentHandleTag.id].join("/");
 
                 const requestBody = {
                     handleType: "updateTag",
                     tag,
-                }
+                };
 
                 axios.put(url, requestBody, corsPutRequestBody)
                     .then(response => {
@@ -179,7 +180,7 @@ export default class TagStore {
         ) {
             this.tagSaveDialogErrorArray.push("tagName");
         } else {
-            const url = [stores.commonStore.serverUrl, this.path].join("/")
+            const url = [stores.commonStore.serverUrl, this.path].join("/");
             axios.post(url, tag, corsPostRequestBody)
                 .then(response => {
                     const statusCode = response.data.statusCode;
@@ -203,7 +204,7 @@ export default class TagStore {
 
     @action
     async getTableData() {
-        const url = [stores.commonStore.serverUrl, this.path].join("/")
+        const url = [stores.commonStore.serverUrl, this.path].join("/");
         const requestConfig = {
             params: {
                 condition: this.condition,
@@ -213,7 +214,7 @@ export default class TagStore {
                 selectType: this.selectType,
             },
             ...corsRequestBody
-        }
+        };
         axios.get(url, requestConfig)
             .then(response => {
                 const statusCode = response.data.statusCode;

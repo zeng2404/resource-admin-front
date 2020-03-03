@@ -336,7 +336,7 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                             ))
                         }
                         {
-                            dateFormatColumns.map((column, index) => (
+                            dateFormatColumns.map((column) => (
                                 <DataTypeProvider
                                     for={[column]}
                                     formatterComponent={

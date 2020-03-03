@@ -6,7 +6,7 @@ import {withStyles} from '@material-ui/core/styles';
 
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import clsx from 'clsx';
-import {FormattedMessage, useIntl} from "react-intl";
+import {useIntl} from "react-intl";
 import {getIntlMessage} from "../utils";
 
 type infoLevel = "success" | "info" | "error" | "warning";
@@ -16,7 +16,7 @@ const variantIcon = {
     info: Info,
     error: Error,
     warning: Warning
-}
+};
 
 
 const styles = (theme: Theme) => createStyles({

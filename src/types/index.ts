@@ -1,5 +1,3 @@
-import {ReactElement} from "react";
-
 export type TagInsertRequestBody = {
     tagName: string;
     tagDescription?: string;
@@ -14,15 +12,6 @@ export type BasicSelectRequestBody = {
     conditionType: string;
     pageSize: number;
     currentPageSize: number;
-};
-
-export type TagSelectRequestBody = {
-    selectType: string;
-} & BasicSelectRequestBody;
-
-export type TableHeaderProps = {
-    name: string;
-    title: string | ReactElement;
 };
 
 export type TableColumnProps = {
