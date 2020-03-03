@@ -7,11 +7,17 @@ export interface CommonIntlProps {
     cancelButtonValue: string;
     submitButtonValue: string;
     addFabTip : string;
+    batchDeleteFabTip: string;
     getServerUrlFail: string;
     addSuccess: string;
     createTime: string;
     lastUpdateTime: string;
     action: string;
+    deleteSuccess: string;
+    deleteFail: string;
+    deleteFabTip: string;
+    editFabTip: string;
+    editSuccess: string;
 }
 
 export interface BookmarkIntlProps {
@@ -21,6 +27,8 @@ export interface BookmarkIntlProps {
 export interface TagIntlProps {
     title: string;
     addDialogTitle: string;
+    deleteDialogTitle: string;
+    editDialogTitle: string;
     tagName: string;
     tagNameLabel: string;
     tagDescription: string;
@@ -28,6 +36,10 @@ export interface TagIntlProps {
     addFail: string;
     duplicatedError: string;
     getDataFail: string;
+    jumpToBookmark: string;
+    batchDeleteDialogTip: string;
+    deleteDialogTip: string;
+    editFail: string;
 
 }
 export interface ILocale extends Record<string, any>{

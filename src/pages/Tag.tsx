@@ -8,6 +8,7 @@ import {
     DialogContent,
     DialogTitle,
     Fab,
+    Grid,
     Paper,
     TextField,
     Tooltip,
@@ -15,14 +16,15 @@ import {
     withStyles
 } from "@material-ui/core";
 import {useIntl} from "react-intl";
-import {Add} from "@material-ui/icons";
+import {Add, Delete, Edit, Forward} from "@material-ui/icons";
 import tagStyles from "../styles/tagStyles";
-import {getIntlMessage} from "../utils";
+import {formatDateTime, getIntlMessage} from "../utils";
 import {Column, DataTypeProvider, IntegratedSelection, SelectionState} from '@devexpress/dx-react-grid';
 import {
     Grid as TableGrid,
     Table,
     TableColumnResizing,
+    TableFixedColumns,
     TableHeaderRow,
     TableSelection,
 } from '@devexpress/dx-react-grid-material-ui';
@@ -46,6 +48,15 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         "common.createTime",
         "common.lastUpdateTime",
         "common.action",
+        "common.addFabTip",
+        "common.batchDeleteFabTip",
+        "common.deleteFabTip",
+        "common.editFabTip",
+        "tag.jumpToBookmark",
+        "tag.deleteDialogTitle",
+        "tag.batchDeleteDialogTip",
+        "tag.deleteDialogTip",
+        "tag.editDialogTitle",
     ];
     const classes = props.classes;
     const store = props.tagStore;
@@ -57,7 +68,11 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         dataCount,
         currentPageNumber,
         pageSize,
-        tableData
+        tableData,
+        tagDeleteDialogVisibility,
+        currentHandleTag,
+        tagEditDialogVisibility,
+        tagEditDialogErrorArray,
     } = props.tagStore;
 
     const [
@@ -72,7 +87,16 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         tagName,
         createTime,
         lastUpdateTime,
-        action
+        action,
+        addFabTip,
+        batchDeleteFabTip,
+        deleteFabTip,
+        editFabTip,
+        jumpToBookmark,
+        deleteDialogTitle,
+        batchDeleteDialogTip,
+        deleteDialogTip,
+        editDialogTitle,
     ] = getIntlMessage(intl, intlArray);
 
     const columns: Column[] = [
@@ -85,10 +109,10 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
 
     const tableColumns: TableColumnProps[] = [
         {columnName: "tagName", width: 200, align: "center"},
-        {columnName: "tagDescription", width: 200, align: "center"},
+        {columnName: "tagDescription", width: 300, align: "center"},
         {columnName: "createTime", width: 200, align: "center"},
         {columnName: "lastUpdateTime", width: 200, align: "center"},
-        {columnName: "action", width: 300, align: "center"},
+        {columnName: "action", width: 240, align: "center"},
     ];
 
     const dateFormatColumns: string[] = ["createTime", "lastUpdateTime"];
@@ -97,13 +121,102 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
 
     useEffect(() => {
         store.getTableData();
-    }, []);
+    }, [currentPageNumber, pageSize]);
 
     return (
         <Paper className={classes.tagBox}>
-            <Typography variant={'h5'}>
-                {title}
-            </Typography>
+            <Dialog open={tagDeleteDialogVisibility}>
+                <DialogTitle>
+                    {deleteDialogTitle}
+                </DialogTitle>
+                <form onSubmit={
+                    (event: FormEvent<HTMLFormElement>) => {
+                        event.preventDefault();
+                        store.handleDeleteDialogSubmit();
+                    }
+                }>
+                    <DialogContent>
+                        <span className={classes.deleteTip}>{
+                            currentHandleTag ?
+                                deleteDialogTip + currentHandleTag.tagName + " ?"
+                                :
+                                batchDeleteDialogTip
+                        }</span>
+                    </DialogContent>
+                    <DialogActions className={classes.dialogAction}>
+                        <Button onClick={() => {
+                            store.setTagDeleteDialogVisibility(false, undefined);
+                        }} color="secondary"
+                                variant="contained">
+                            {cancelButtonValue}
+                        </Button>
+                        <Button type={'submit'} color="primary" variant="contained">
+                            {submitButtonValue}
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
+            <Dialog open={tagEditDialogVisibility}>
+                <DialogTitle>
+                    {editDialogTitle}
+                </DialogTitle>
+                <form onSubmit={
+                    (event: FormEvent<HTMLFormElement>) => {
+                        event.preventDefault();
+                        const target = event.target as HTMLFormElement;
+                        store.updateTag({
+                            id: currentHandleTag ? currentHandleTag.id : "",
+                            tagName: target.tagSubmitName.value,
+                            tagDescription: target.tagDescription.value,
+                        })
+                    }
+                }>
+                    <DialogContent>
+                        <TextField
+                            label={
+                                tagNameLabel
+                            }
+                            error={tagSaveDialogErrorArray.indexOf("tagName") !== -1}
+                            helperText={
+                                tagEditDialogErrorArray.indexOf("tagName") !== -1 ?
+                                    tagNameValidateErrorTip
+                                    : ""
+                            }
+                            fullWidth
+                            defaultValue={currentHandleTag ? currentHandleTag.tagName : ""}
+                            name={"tagSubmitName"}
+                            className={classes.textField}
+                            margin={"normal"}
+                            variant={"outlined"}
+                        />
+                        <TextField
+                            label={
+                                tagDescription
+                            }
+                            fullWidth
+                            defaultValue={currentHandleTag ? currentHandleTag.tagDescription : ""}
+                            name={"tagDescription"}
+                            className={classes.textField}
+                            margin={"normal"}
+                            variant={"outlined"}
+                        />
+                    </DialogContent>
+                    <DialogActions className={classes.dialogAction}>
+                        <Button type={'reset'} color="default" variant="contained">
+                            {resetButtonValue}
+                        </Button>
+                        <Button onClick={() => {
+                            store.setTagEditDialogVisibility(false, undefined);
+                        }} color="secondary"
+                                variant="contained">
+                            {cancelButtonValue}
+                        </Button>
+                        <Button type={'submit'} color="primary" variant="contained">
+                            {submitButtonValue}
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
             <Dialog open={tagSaveDialogVisibility}>
                 <DialogTitle>
                     {addDialogTitle}
@@ -120,7 +233,6 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                 }>
                     <DialogContent>
                         <TextField
-                            id={"tagSubmitName"}
                             label={
                                 tagNameLabel
                             }
@@ -137,7 +249,6 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                             variant={"outlined"}
                         />
                         <TextField
-                            id={"tagDescription"}
                             label={
                                 tagDescription
                             }
@@ -164,89 +275,147 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                     </DialogActions>
                 </form>
             </Dialog>
-            <div>
 
-            </div>
-            <div>
-                <Tooltip title={"test"} placement={"top"} className={classes.addButton}>
-                    <Fab size={"small"}>
-                        <Add onClick={() => store.changeTagSaveDialogVisibilityStatus(true)}/>
-                    </Fab>
-                </Tooltip>
-            </div>
-            <div>
-                <TableGrid
-                    rows={tableData}
-                    columns={columns}
+            <div className={classes.tableOuterBox}>
+                <Grid
+                    container
+                    direction="row"
+                    justify="space-between"
+                    alignItems="center"
+                    className={classes.tableHeaderBox}
                 >
-                    {
-                        needTooltipColumns.map((column) => (
-                            <DataTypeProvider for={[column]}
-                                              formatterComponent={
-                                                  (value) => (
-                                                      <Tooltip title={value.row[column]}
-                                                               placement={"top"}
-                                                               classes={{tooltip: classes.tooltipLargeWidth}}
-                                                               children={
-                                                                   <div>{value.row[column]}</div>
-                                                               }
-                                                      />)
-                                              }
-                            />
-                        ))
-                    }
-                    {
-                        dateFormatColumns.map((column, index) => (
-                            <DataTypeProvider
-                                for={[column]}
-                                formatterComponent={
-                                    (value) => {
-                                        return (
-                                            <Tooltip
-                                                classes={{tooltip: classes.tooltipLargeWidth}}
-                                                placement={'top'}
-                                                title={new Date(value.row[column]['time']).toLocaleString()}
-                                                children={
-                                                    <div>{new Date(value.row[column]['time']).toLocaleString()}</div>}/>
-                                        )
+                    <Grid item>
+                        <Typography variant={'h5'}>
+                            {title}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+
+                    </Grid>
+                    <Grid item>
+                        {
+                            selection.length === 0 ?
+                                <Tooltip title={addFabTip} placement={"top"} className={classes.addButton}>
+                                    <Fab size={"small"}>
+                                        <Add onClick={() => store.changeTagSaveDialogVisibilityStatus(true)}/>
+                                    </Fab>
+                                </Tooltip>
+                                :
+                                <Tooltip title={batchDeleteFabTip} placement={"top"}
+                                         className={classes.batchDeleteButton}>
+                                    <Fab size={"small"}>
+                                        <Delete onClick={() => {
+                                            store.setTagDeleteDialogVisibility(true, undefined);
+                                        }}/>
+                                    </Fab>
+                                </Tooltip>
+                        }
+                    </Grid>
+                </Grid>
+                <div>
+                    <TableGrid
+                        rows={tableData}
+                        columns={columns}
+                        getRowId={(row) => row["id"]}
+                    >
+                        {
+                            needTooltipColumns.map((column) => (
+                                <DataTypeProvider for={[column]}
+                                                  formatterComponent={
+                                                      (value) => (
+                                                          <Tooltip
+                                                              title={value.row[column] ? value.row[column] : ""}
+                                                              placement={"top"}
+                                                              classes={{tooltip: classes.tooltipLargeWidth}}
+                                                              children={
+                                                                  <div>{value.row[column]}</div>
+                                                              }
+                                                          />)
+                                                  }
+                                />
+                            ))
+                        }
+                        {
+                            dateFormatColumns.map((column, index) => (
+                                <DataTypeProvider
+                                    for={[column]}
+                                    formatterComponent={
+                                        (value) => {
+                                            return (
+                                                <Tooltip
+                                                    classes={{tooltip: classes.tooltipLargeWidth}}
+                                                    placement={'top'}
+                                                    title={formatDateTime(value.row[column])}
+                                                    children={
+                                                        <div>{formatDateTime(value.row[column])}</div>}/>
+                                            )
+                                        }
                                     }
-                                }
-                            />
-                        ))
-                    }
-                    <DataTypeProvider
-                        for={['action']}
-                        formatterComponent={(value) => {
-                            return (<div></div>)
+                                />
+                            ))
+                        }
+                        <DataTypeProvider
+                            for={['action']}
+                            formatterComponent={(value) => {
+                                return (<div>
+                                    <Tooltip
+                                        classes={{tooltip: classes.tooltipLargeWidth}}
+                                        placement={'top'} title={editFabTip}
+                                        children={<Fab variant={'round'} size={'small'}
+                                                       className={classes.editButton}
+                                            onClick={() => store.setTagEditDialogVisibility(true,value.row)}
+                                                       children={<Edit/>}/>}/>
+                                    <Tooltip
+                                        classes={{tooltip: classes.tooltipLargeWidth}}
+                                        placement={'top'} title={deleteFabTip}
+                                        children={<Fab variant={'round'} size={'small'}
+                                                       className={classes.deleteButton}
+                                                       onClick={() => {
+                                                           store.setTagDeleteDialogVisibility(true, value.row)
+                                                       }}
+                                                       children={<Delete/>}/>}/>
+                                    <Tooltip
+                                        classes={{tooltip: classes.tooltipLargeWidth}}
+                                        placement={'top'} title={jumpToBookmark}
+                                        children={<Fab variant={'round'} size={'small'}
+                                                       className={classes.jumpToBookmarkButton}
+                                            // onClick={() => changeUserDeleteDialog(true,[value.row],0)}
+                                                       children={<Forward/>}/>}/>
+                                </div>)
+                            }}
+                        />
+
+                        <SelectionState selection={selection}
+                                        onSelectionChange={selection => {
+                                            store.setSelection(selection)
+                                        }}
+                        />
+                        <IntegratedSelection/>
+                        <Table columnExtensions={tableColumns}/>
+                        <TableSelection showSelectAll highlightRow/>
+                        <TableColumnResizing
+                            defaultColumnWidths={tableColumns}/>
+                        <TableHeaderRow/>
+                        <TableFixedColumns
+                            leftColumns={[TableSelection.COLUMN_TYPE, "tagName"]}
+                        />
+                    </TableGrid>
+                    <TablePagination
+                        rowsPerPageOptions={rowsPerPageOptions}
+                        component="div"
+                        count={dataCount}
+                        rowsPerPage={pageSize}
+                        page={currentPageNumber}
+                        backIconButtonProps={{
+                            'aria-label': 'Previous Page',
                         }}
+                        nextIconButtonProps={{
+                            'aria-label': 'Next Page',
+                        }}
+                        onChangePage={(event, currentPageNumber) => store.setCurrentPageNumber(currentPageNumber)}
+                        onChangeRowsPerPage={(event) => store.setPageSize(Number(event.target.value))}
                     />
-                    <SelectionState selection={selection}
-                                    onSelectionChange={selection => {
-                                        store.setSelection(selection)
-                                    }}
-                    />
-                    <IntegratedSelection/>
-                    <Table columnExtensions={tableColumns}/>
-                    <TableSelection showSelectAll highlightRow/>
-                    <TableColumnResizing
-                        defaultColumnWidths={tableColumns}/>
-                    <TableHeaderRow/>
-                </TableGrid>
-                <TablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
-                    component="div"
-                    count={dataCount}
-                    rowsPerPage={pageSize}
-                    page={currentPageNumber}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
-                    onChangePage={(event,currentPageNumber) => store.setCurrentPageNumber(currentPageNumber)}
-                    onChangeRowsPerPage={(event) => store.setPageSize(Number(event.target.value))}
-                />
+                </div>
             </div>
         </Paper>
     )

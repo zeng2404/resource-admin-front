@@ -19,7 +19,6 @@ import {flattenMessages} from "./utils";
 @observer
 class App extends Component<IStore, object> {
     componentDidMount(): void {
-        console.log(this.props);
         this.props.commonStore.initialServerUrl();
     }
 

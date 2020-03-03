@@ -5,6 +5,10 @@ export type TagInsertRequestBody = {
     tagDescription?: string;
 };
 
+export type TagUpdateRequestBody = {
+    id: string;
+} & TagInsertRequestBody;
+
 export type BasicSelectRequestBody = {
     condition: string;
     conditionType: string;

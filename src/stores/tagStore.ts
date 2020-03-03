@@ -1,15 +1,17 @@
 import {action, observable} from "mobx";
-import {TagEntity, TagInsertRequestBody} from "../types";
+import {TagEntity, TagInsertRequestBody, TagUpdateRequestBody} from "../types";
 import {stringUtils} from "../utils";
 import stores from "./index";
-import {corsPostRequestBody, corsRequestBody} from "../constants";
+import {corsPostRequestBody, corsPutRequestBody, corsRequestBody} from "../constants";
 import axios from "axios";
 
-export default class TagStore{
+export default class TagStore {
     @observable
     tagSaveDialogVisibility: boolean = false;
     @observable
     tagSaveDialogErrorArray: string[] = [];
+    @observable
+    tagEditDialogErrorArray: string[] = [];
     @observable
     selection: Array<number | string> = [];
     @observable
@@ -24,10 +26,42 @@ export default class TagStore{
     conditionType: string = "";
     @observable
     tableData: TagEntity[] = [];
+    @observable
+    tagDeleteDialogVisibility: boolean = false;
+    @observable
+    currentHandleTag?: TagEntity = undefined;
+    @observable
+    tagEditDialogVisibility: boolean = false;
 
     readonly selectType: string = "getTagsByCondition";
 
     readonly path = "tag";
+
+    @action
+    setTagEditDialogVisibility(isVisible: boolean, currentHandleTag: TagEntity | undefined) {
+        if(isVisible) {
+            this.tagEditDialogErrorArray = [];
+        }
+        this.tagEditDialogVisibility = isVisible;
+        this.currentHandleTag = currentHandleTag;
+    }
+
+    @action
+    setTagDeleteDialogVisibility(isVisible: boolean, currentHandleTag: TagEntity | undefined) {
+        this.tagDeleteDialogVisibility = isVisible;
+        this.currentHandleTag = currentHandleTag;
+    }
+
+    @action
+    handleDeleteDialogSubmit() {
+        if(this.currentHandleTag) {
+            this.deleteTag([this.currentHandleTag.id]);
+        }
+        else {
+            this.batchDeleteTag();
+        }
+        this.setTagDeleteDialogVisibility(false, undefined);
+    }
 
     @action
     setCondition(condition: string) {
@@ -61,10 +95,80 @@ export default class TagStore{
 
     @action
     changeTagSaveDialogVisibilityStatus(isVisible: boolean) {
-        if(isVisible === true) {
+        if (isVisible === true) {
             this.tagSaveDialogErrorArray = [];
         }
         this.tagSaveDialogVisibility = isVisible;
+    }
+
+    @action
+    batchDeleteTag() {
+        this.deleteTag(this.selection);
+    }
+
+    @action
+    deleteTag(tagIds: Array<string | number>) {
+        const ids: string = tagIds.join(",");
+        const url = [stores.commonStore.serverUrl, this.path, ids].join("/");
+        axios.delete(url, corsRequestBody)
+            .then(response => {
+                const statusCode = response.data.statusCode;
+                if (statusCode === 200) {
+                    stores.commonStore.setSnackbarMessage("common.deleteSuccess", "success");
+                    if(this.currentPageNumber !== 0 && this.currentPageNumber === (this.dataCount / this.pageSize)) {
+                        if(tagIds.length >= this.dataCount % this.pageSize) {
+                            this.currentPageNumber -= 1;
+                        }
+                    }
+                    this.getTableData();
+                } else {
+                    stores.commonStore.setSnackbarMessage("tag.deleteFail", "error");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                stores.commonStore.setSnackbarMessage("tag.deleteFail", "error");
+            })
+    }
+
+    @action
+    async updateTag(tag: TagUpdateRequestBody) {
+        if (stringUtils.isNullOrEmpty(tag.tagName.trim()) ||
+            stringUtils.hasStr(tag.tagName, ",") ||
+            stringUtils.hasStr(tag.tagName, "，")
+        ) {
+            this.tagEditDialogErrorArray.push("tagName");
+        }
+        else {
+            if(this.currentHandleTag) {
+                const url = [stores.commonStore.serverUrl, this.path, this.currentHandleTag.id].join("/")
+
+                const requestBody = {
+                    handleType: "updateTag",
+                    tag,
+                }
+
+                axios.put(url, requestBody, corsPutRequestBody)
+                    .then(response => {
+                        const statusCode = response.data.statusCode;
+                        if (statusCode === 601) {
+                            stores.commonStore.setSnackbarMessage("tag.duplicatedError", "error");
+                        } else if (statusCode === 200) {
+                            this.setTagEditDialogVisibility(false, undefined);
+                            stores.commonStore.setSnackbarMessage("common.editSuccess", "success");
+                            this.getTableData();
+                        } else {
+                            stores.commonStore.setSnackbarMessage("tag.editFail", "error");
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        stores.commonStore.setSnackbarMessage("tag.editFail", "error");
+                    })
+
+            }
+        }
+
     }
 
     @action
@@ -83,6 +187,8 @@ export default class TagStore{
                         stores.commonStore.setSnackbarMessage("tag.duplicatedError", "error");
                     } else if (statusCode === 200) {
                         this.changeTagSaveDialogVisibilityStatus(false);
+                        this.currentPageNumber = 0;
+                        this.getTableData();
                         stores.commonStore.setSnackbarMessage("common.addSuccess", "success");
                     } else {
                         stores.commonStore.setSnackbarMessage("tag.addFail", "error");
@@ -96,7 +202,7 @@ export default class TagStore{
     }
 
     @action
-    async getTableData(){
+    async getTableData() {
         const url = [stores.commonStore.serverUrl, this.path].join("/")
         const requestConfig = {
             params: {
@@ -111,11 +217,11 @@ export default class TagStore{
         axios.get(url, requestConfig)
             .then(response => {
                 const statusCode = response.data.statusCode;
-                if(statusCode === 200) {
-                   this.dataCount = response.data.total;
-                   this.tableData = response.data.data;
-                }
-                else {
+                if (statusCode === 200) {
+                    this.dataCount = response.data.total;
+                    this.tableData = response.data.data;
+                    this.selection = [];
+                } else {
                     stores.commonStore.setSnackbarMessage("tag.getDataFail", "error");
                 }
             })

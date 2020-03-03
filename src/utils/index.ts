@@ -41,3 +41,10 @@ export const getIntlMessage = (intl: IntlShape, intlIds: string[]): string[] => 
     });
     return intlMessageArray;
 }
+
+export const formatDateTime = (dateString: string) => {
+    const d = new Date(dateString);
+    const date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    return date;
+
+}
