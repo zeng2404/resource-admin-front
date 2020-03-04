@@ -32,10 +32,29 @@ export default class TagStore {
     currentHandleTag?: TagEntity = undefined;
     @observable
     tagEditDialogVisibility: boolean = false;
+    @observable
+    labelWidth: number = 0;
 
     readonly selectType: string = "getTagsByCondition";
 
     readonly path = "tag";
+
+    @action
+    setLabelWidth(labelWidth: number) {
+        this.labelWidth = labelWidth;
+    }
+
+    @action
+    handleConditionInputKeyDown(charCode: number, inputValue: string) {
+        if(charCode === 13) {
+            if(this.currentPageNumber !== 0) {
+                this.currentPageNumber = 0;
+            }
+            else {
+                this.getTableData();
+            }
+        }
+    }
 
     @action
     setTagEditDialogVisibility(isVisible: boolean, currentHandleTag: TagEntity | undefined) {
@@ -120,7 +139,9 @@ export default class TagStore {
                             this.currentPageNumber -= 1;
                         }
                     }
-                    this.getTableData();
+                    else {
+                        this.getTableData();
+                    }
                 } else {
                     stores.commonStore.setSnackbarMessage("tag.deleteFail", "error");
                 }
@@ -189,7 +210,7 @@ export default class TagStore {
                     } else if (statusCode === 200) {
                         this.changeTagSaveDialogVisibilityStatus(false);
                         this.currentPageNumber = 0;
-                        this.getTableData();
+                        // this.getTableData();
                         stores.commonStore.setSnackbarMessage("common.addSuccess", "success");
                     } else {
                         stores.commonStore.setSnackbarMessage("tag.addFail", "error");

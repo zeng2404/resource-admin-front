@@ -18,6 +18,9 @@ export interface CommonIntlProps {
     deleteFabTip: string;
     editFabTip: string;
     editSuccess: string;
+    queryConditionLabel: string;
+    queryConditionPlaceholder: string;
+    queryOptionLabel: string;
 }
 
 export interface BookmarkIntlProps {

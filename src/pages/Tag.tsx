@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect} from "react";
+import React, {FormEvent, useEffect, useRef} from "react";
 import IStore from "../interfaces/IStore";
 import {inject, observer} from "mobx-react";
 import {
@@ -7,9 +7,9 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Fab,
-    Grid,
-    Paper,
+    Fab, FormControl,
+    Grid, InputLabel, MenuItem, OutlinedInput,
+    Paper, Select,
     TextField,
     Tooltip,
     Typography,
@@ -28,7 +28,7 @@ import {
     TableHeaderRow,
     TableSelection,
 } from '@devexpress/dx-react-grid-material-ui';
-import {TableColumnProps} from "../types";
+import {SelectOption, TableColumnProps} from "../types";
 import TablePagination from "@material-ui/core/TablePagination";
 import {rowsPerPageOptions} from "../constants";
 
@@ -57,6 +57,9 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         "tag.batchDeleteDialogTip",
         "tag.deleteDialogTip",
         "tag.editDialogTitle",
+        "common.queryConditionLabel",
+        "common.queryConditionPlaceholder",
+        "common.queryOptionLabel",
     ];
     const classes = props.classes;
     const store = props.tagStore;
@@ -73,6 +76,9 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         currentHandleTag,
         tagEditDialogVisibility,
         tagEditDialogErrorArray,
+        conditionType,
+        condition,
+        labelWidth,
     } = props.tagStore;
 
     const [
@@ -97,6 +103,9 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         batchDeleteDialogTip,
         deleteDialogTip,
         editDialogTitle,
+        queryConditionLabel,
+        queryConditionPlaceholder,
+        queryOptionLabel,
     ] = getIntlMessage(intl, intlArray);
 
     const columns: Column[] = [
@@ -119,9 +128,23 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
 
     const needTooltipColumns: string[] = ["tagName", "tagDescription"];
 
+    const selectOptions: SelectOption[] = [
+        {value: "tagName", text: tagName},
+        {value: "tagDescription", text: tagDescription},
+    ];
+
+    const inputLabel = React.useRef<HTMLLabelElement>(null);
+
+    const inputRef = React.useRef<HTMLInputElement>(null);
+
+
     useEffect(() => {
         store.getTableData();
     }, [currentPageNumber, pageSize]);
+
+    useEffect(() => {
+        store.setLabelWidth(inputLabel.current!.offsetWidth);
+    }, [props.commonStore.currentLocaleChooseIndex]);
 
     return (
         <Paper className={classes.tagBox}>
@@ -313,6 +336,36 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                     </Grid>
                 </Grid>
                 <div>
+                    <TextField
+                        label={queryConditionLabel}
+                        placeholder={queryConditionPlaceholder}
+                        margin="normal"
+                        variant="outlined"
+                        ref={inputRef}
+                        value={condition}
+                        className={classes.selection}
+                        onChange={event => {store.setCondition(event.target.value)}}
+                        onKeyPress={event => {if(event.charCode === 13) console.log(inputRef);}}
+                    />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel ref={inputLabel}>
+                            {queryOptionLabel}
+                        </InputLabel>
+                        <Select
+                            value={conditionType}
+                            onChange={ event => {store.setConditionType((event.target as HTMLInputElement).value)}}
+                            input={<OutlinedInput name={queryOptionLabel} labelWidth={labelWidth}/>}
+                        >
+                            <MenuItem value="" disabled>
+                                {queryOptionLabel}
+                            </MenuItem>
+                            {selectOptions.map((value) => (
+                                <MenuItem value={value.value}>{value.text}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </div>
+                <div>
                     <TableGrid
                         rows={tableData}
                         columns={columns}
@@ -421,5 +474,5 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
     )
 };
 
-export default withStyles(tagStyles)(inject("tagStore")(observer(Tag)));
+export default withStyles(tagStyles)(inject("tagStore", "commonStore")(observer(Tag)));
 

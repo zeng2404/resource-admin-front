@@ -27,3 +27,8 @@ export type TagEntity = {
     createTime: Date;
     lastUpdateTime: Date;
 }
+
+export type SelectOption = {
+    value: string;
+    text: string;
+}

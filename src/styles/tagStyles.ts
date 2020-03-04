@@ -66,7 +66,12 @@ const tagStyles = (theme: Theme) => createStyles({
     },
     deleteTip: {
         color: "#ff3d00",
-    }
+    },
+    formControl: {
+        minWidth: 200,
+        marginTop: 16,
+        marginLeft: 30,
+    },
 });
 
 export default tagStyles;

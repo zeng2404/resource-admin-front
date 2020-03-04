@@ -21,6 +21,9 @@ const en_US: ILocale = {
         deleteFabTip: "Delete",
         editFabTip: "Edit",
         editSuccess: "Edit Success",
+        queryConditionLabel: "Query Condition",
+        queryConditionPlaceholder: "Enter search conditions",
+        queryOptionLabel: "Query Option",
     },
     bookmark: {
         title: "Bookmark Management",

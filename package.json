@@ -78,7 +78,7 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
+    "dev": "webpack-dev-server --mode development --port 8888",
     "build": "webpack --mode production",
     "start": "node scripts/start.js",
     "test": "node scripts/test.js"

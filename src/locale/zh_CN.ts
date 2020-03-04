@@ -21,6 +21,9 @@ const zh_CN: ILocale = {
         deleteFabTip: "删除",
         editFabTip: "修改",
         editSuccess: "修改成功",
+        queryConditionLabel: "查询条件",
+        queryConditionPlaceholder: "请输入查询条件",
+        queryOptionLabel: "查询类型",
     },
     bookmark: {
         title: "书签管理",
