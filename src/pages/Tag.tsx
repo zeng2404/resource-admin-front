@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useRef} from "react";
+import React, {FormEvent, useEffect} from "react";
 import IStore from "../interfaces/IStore";
 import {inject, observer} from "mobx-react";
 import {
@@ -7,18 +7,23 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Fab, FormControl,
-    Grid, InputLabel, MenuItem, OutlinedInput,
-    Paper, Select,
+    Fab,
+    FormControl,
+    Grid,
+    InputLabel,
+    MenuItem,
+    OutlinedInput,
+    Paper,
+    Select,
     TextField,
     Tooltip,
     Typography,
     withStyles
 } from "@material-ui/core";
 import {useIntl} from "react-intl";
-import {Add, Delete, Edit, Forward} from "@material-ui/icons";
+import {Add, Delete, Edit} from "@material-ui/icons";
 import tagStyles from "../styles/tagStyles";
-import {formatDateTime, getIntlMessage} from "../utils";
+import {formatDateTime, getInputRefValue, getIntlMessage} from "../utils";
 import {Column, DataTypeProvider, IntegratedSelection, SelectionState} from '@devexpress/dx-react-grid';
 import {
     Grid as TableGrid,
@@ -52,14 +57,14 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         "common.batchDeleteFabTip",
         "common.deleteFabTip",
         "common.editFabTip",
-        "tag.jumpToBookmark",
         "tag.deleteDialogTitle",
         "tag.batchDeleteDialogTip",
-        "tag.deleteDialogTip",
+        "common.deleteDialogTip",
         "tag.editDialogTitle",
         "common.queryConditionLabel",
         "common.queryConditionPlaceholder",
         "common.queryOptionLabel",
+        "common.allConditionType",
     ];
     const classes = props.classes;
     const store = props.tagStore;
@@ -77,7 +82,6 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         tagEditDialogVisibility,
         tagEditDialogErrorArray,
         conditionType,
-        condition,
         labelWidth,
     } = props.tagStore;
 
@@ -98,7 +102,6 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         batchDeleteFabTip,
         deleteFabTip,
         editFabTip,
-        jumpToBookmark,
         deleteDialogTitle,
         batchDeleteDialogTip,
         deleteDialogTip,
@@ -106,6 +109,7 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
         queryConditionLabel,
         queryConditionPlaceholder,
         queryOptionLabel,
+        allConditionType,
     ] = getIntlMessage(intl, intlArray);
 
     const columns: Column[] = [
@@ -129,6 +133,7 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
     const needTooltipColumns: string[] = ["tagName", "tagDescription"];
 
     const selectOptions: SelectOption[] = [
+        {value: "all", text: allConditionType},
         {value: "tagName", text: tagName},
         {value: "tagDescription", text: tagDescription},
     ];
@@ -136,7 +141,6 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
     const inputLabel = React.useRef<HTMLLabelElement>(null);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
-
 
     useEffect(() => {
         store.getTableData();
@@ -199,7 +203,7 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                             label={
                                 tagNameLabel
                             }
-                            error={tagSaveDialogErrorArray.indexOf("tagName") !== -1}
+                            error={tagEditDialogErrorArray.indexOf("tagName") !== -1}
                             helperText={
                                 tagEditDialogErrorArray.indexOf("tagName") !== -1 ?
                                     tagNameValidateErrorTip
@@ -342,10 +346,9 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                         margin="normal"
                         variant="outlined"
                         ref={inputRef}
-                        value={condition}
-                        className={classes.selection}
-                        onChange={event => {store.setCondition(event.target.value)}}
-                        onKeyPress={event => {if(event.charCode === 13) console.log(inputRef);}}
+                        onKeyPress={event => {
+                            if (event.charCode === 13) store.submitQuery(getInputRefValue(inputRef));
+                        }}
                     />
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel ref={inputLabel}>
@@ -353,7 +356,9 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                         </InputLabel>
                         <Select
                             value={conditionType}
-                            onChange={ event => {store.setConditionType((event.target as HTMLInputElement).value)}}
+                            onChange={event => {
+                                store.setConditionType((event.target as HTMLInputElement).value)
+                            }}
                             input={<OutlinedInput name={queryOptionLabel} labelWidth={labelWidth}/>}
                         >
                             <MenuItem value="" disabled>
@@ -416,7 +421,7 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                                         placement={'top'} title={editFabTip}
                                         children={<Fab variant={'round'} size={'small'}
                                                        className={classes.editButton}
-                                            onClick={() => store.setTagEditDialogVisibility(true,value.row)}
+                                                       onClick={() => store.setTagEditDialogVisibility(true, value.row)}
                                                        children={<Edit/>}/>}/>
                                     <Tooltip
                                         classes={{tooltip: classes.tooltipLargeWidth}}
@@ -427,13 +432,13 @@ const Tag: React.FunctionComponent<IStore> = (props: IStore) => {
                                                            store.setTagDeleteDialogVisibility(true, value.row)
                                                        }}
                                                        children={<Delete/>}/>}/>
-                                    <Tooltip
-                                        classes={{tooltip: classes.tooltipLargeWidth}}
-                                        placement={'top'} title={jumpToBookmark}
-                                        children={<Fab variant={'round'} size={'small'}
-                                                       className={classes.jumpToBookmarkButton}
-                                            // onClick={() => changeUserDeleteDialog(true,[value.row],0)}
-                                                       children={<Forward/>}/>}/>
+                                    {/*<Tooltip*/}
+                                    {/*    classes={{tooltip: classes.tooltipLargeWidth}}*/}
+                                    {/*    placement={'top'} title={jumpToBookmark}*/}
+                                    {/*    children={<Fab variant={'round'} size={'small'}*/}
+                                    {/*                   className={classes.jumpToBookmarkButton}*/}
+                                    {/*        // onClick={() => changeUserDeleteDialog(true,[value.row],0)}*/}
+                                    {/*                   children={<Forward/>}/>}/>*/}
                                 </div>)
                             }}
                         />

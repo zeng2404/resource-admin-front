@@ -3,16 +3,10 @@ import {IntlShape} from "react-intl";
 
 export const stringUtils = {
     isNullOrEmpty: (s: string): boolean => {
-        if (!s || s.length === 0) {
-            return true;
-        }
-        return false;
+        return !s || s.trim().length === 0;
     },
     hasStr: (source: string, target: string): boolean => {
-        if (source.indexOf(target) !== -1) {
-            return true;
-        }
-        return false;
+        return source.indexOf(target) !== -1;
     }
 };
 
@@ -21,8 +15,8 @@ export const flattenMessages = ((nestedMessages: ILocale, prefix = '') => {
         return {}
     }
     return Object.keys(nestedMessages).reduce((messages, key) => {
-        const value = nestedMessages[key]
-        const prefixedKey = prefix ? `${prefix}.${key}` : key
+        const value = nestedMessages[key];
+        const prefixedKey = prefix ? `${prefix}.${key}` : key;
 
         if (typeof value === 'string') {
             Object.assign(messages, {[prefixedKey]: value})
@@ -35,16 +29,18 @@ export const flattenMessages = ((nestedMessages: ILocale, prefix = '') => {
 });
 
 export const getIntlMessage = (intl: IntlShape, intlIds: string[]): string[] => {
-    const intlMessageArray: string[] = [];
-    intlIds.map((item) => {
-        intlMessageArray.push(intl.formatMessage({id: item}));
-    });
-    return intlMessageArray;
-}
+    return intlIds.flatMap((item) => intl.formatMessage({id: item}));
+};
+
 
 export const formatDateTime = (dateString: string) => {
     const d = new Date(dateString);
-    const date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-    return date;
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+};
 
-}
+
+export const getInputRefValue = (inputRef: any) => {
+    return (inputRef.current.lastElementChild!.firstChild as HTMLInputElement).value;
+};
+
+

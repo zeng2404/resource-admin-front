@@ -3,16 +3,19 @@ export type TagInsertRequestBody = {
     tagDescription?: string;
 };
 
+export type BookmarkInsertRequestBody = {
+    bookmarkDescription: string;
+    bookmarkUrl: string;
+    tagIds: string[];
+};
+
+export type BookmarkUpdateRequestBody = {
+    id: string;
+} & BookmarkInsertRequestBody;
+
 export type TagUpdateRequestBody = {
     id: string;
 } & TagInsertRequestBody;
-
-export type BasicSelectRequestBody = {
-    condition: string;
-    conditionType: string;
-    pageSize: number;
-    currentPageSize: number;
-};
 
 export type TableColumnProps = {
     columnName: string;
@@ -28,6 +31,21 @@ export type TagEntity = {
     lastUpdateTime: Date;
 }
 
+export type BookmarkEntity = {
+    bookmarkId: string;
+    bookmarkDescription: string;
+    bookmarkUrl: string;
+    createTime: Date;
+    lastUpdateTime: Date;
+    tagIds: string;
+    tagNames: string;
+}
+
+export type TagMenuItem = {
+    id: string;
+    tagName: string;
+
+}
 export type SelectOption = {
     value: string;
     text: string;

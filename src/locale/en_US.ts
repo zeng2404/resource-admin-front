@@ -24,9 +24,30 @@ const en_US: ILocale = {
         queryConditionLabel: "Query Condition",
         queryConditionPlaceholder: "Enter search conditions",
         queryOptionLabel: "Query Option",
+        allConditionType: "All",
+        addFail: "Add fail",
+        copyFabTip: "Copy",
+        editFail: "Edit Fail",
+        deleteDialogTip: "Are you sure you want to delete ",
+        searchFabTip: "Search",
     },
     bookmark: {
         title: "Bookmark Management",
+        addDialogTitle: "Add Bookmark",
+        deleteDialogTitle: "Delete Bookmark",
+        editDialogTitle: "Edit Bookmark",
+        bookmarkDescription: "Bookmark Description",
+        bookmarkDescriptionLabel: "Bookmark Description*",
+        bookmarkUrl: "Bookmark Url",
+        bookmarkUrlLabel: "Bookmark Url*",
+        bookmarkDescriptionEmptyErrorTip: "bookmark description can not be empty",
+        bookmarkUrlEmptyErrorTip: "bookmark url can not be empty",
+        tag: "Tags",
+        getTagMenuFail: "Get tag menu list fail",
+        getDataFail: "Get bookmark Data fail",
+        copyURLFabTip: "Copy URL",
+        jumpToURLFabTip: "Jump To URL",
+        batchDeleteDialogTip: "Are you sure you want to delete the selected bookmark ?"
     },
     tag: {
         title: "Tag Management",
@@ -42,7 +63,6 @@ const en_US: ILocale = {
         getDataFail: "Get Tag Data Fail",
         jumpToBookmark: "Jump To Bookmark",
         batchDeleteDialogTip: "Are you sure you want to delete the selected tag ?",
-        deleteDialogTip: "Are you sure you want to delete ",
         editFail: "Edit Tag Fail",
     }
 

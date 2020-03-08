@@ -3,8 +3,8 @@ import BookmarkStore from "./bookmarkStore";
 import TagStore from "./tagStore";
 
 let commonStore: CommonStore = new CommonStore();
-let bookmarkStore: BookmarkStore = new BookmarkStore();
-let tagStore: TagStore = new TagStore();
+let bookmarkStore: BookmarkStore = new BookmarkStore(commonStore);
+let tagStore: TagStore = new TagStore(commonStore);
 
 
 const stores = {

@@ -33,12 +33,10 @@ class App extends Component<IStore, object> {
                     break;
                 default:
                     return en_US;
-                    break;
             }
         };
 
         const {
-            localeDescriptionList,
             currentLocaleChooseIndex,
             localeList,
             snackbarVisibility,
@@ -75,7 +73,7 @@ class App extends Component<IStore, object> {
                         <HashRouter>
                             <Switch>
                                 {
-                                    routes.map((route: IRouteComponent, index: number) => (
+                                    routes.map((route: IRouteComponent) => (
                                         <Route exact {...route}/>
                                     ))
                                 }
@@ -86,6 +84,6 @@ class App extends Component<IStore, object> {
             </div>
         );
     }
-};
+}
 
 export default withStyles(appStyles)(App);

@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect} from "react";
+import React, {FunctionComponent} from "react";
 import {CheckCircle, Close, Error, Info, Warning,} from "@material-ui/icons";
 import {amber, lightBlue, teal} from '@material-ui/core/colors';
 import {createStyles, IconButton, Theme} from "@material-ui/core";
@@ -59,10 +59,6 @@ const MySnackbarContent: FunctionComponent<MySnackbarContentProps> = (props: MyS
     const Icon = variantIcon[infoLevel];
     const intl = useIntl();
     const [message] = getIntlMessage(intl, [messageIntlId]);
-
-    useEffect(() => {
-        console.log("intlId: " + messageIntlId);
-    }, [messageIntlId]);
 
     return (
             <SnackbarContent

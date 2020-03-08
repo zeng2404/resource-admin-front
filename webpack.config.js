@@ -1,9 +1,9 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const {CleanWebpackPlugin} = require("clean-webpack-plugin")
 const GenerateAssetPlugin = require('generate-asset-webpack-plugin')
 const serverConfig = require('./serverConfig.json')
-const createJson = function(compilation) {
+const createJson = function (compilation) {
     return JSON.stringify(serverConfig);
 };
 
@@ -15,7 +15,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].bundle.js'
     },
-    devtool: "source-map",
+    // devtool: "source-map",
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     },
@@ -32,14 +32,15 @@ module.exports = {
             },
             {
                 test: /(\.jsx|\.js)$/,
-                use:[{
-                    loader:"babel-loader",
-                    options:{
-                        presets:[
-                            "react","es2015"
+                use: [{
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                            "react", "es2015"
                         ]
-                    }}],
-                exclude:/node_modules/
+                    }
+                }],
+                exclude: /node_modules/
             },
             {
                 test: /\.(png|jpe?g|gif|svg|ttf)(\?.*)?$/,
@@ -63,5 +64,5 @@ module.exports = {
                 cb(null, createJson(compilation));
             }
         })
-    ]
+    ],
 };

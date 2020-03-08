@@ -1,4 +1,4 @@
-import {action, observable} from "mobx";
+import {action, computed, observable} from "mobx";
 import axios from "axios";
 
 class CommonStore {
@@ -23,12 +23,8 @@ class CommonStore {
     @observable
     localeChooseMenuAnchorEl: any = null;
     @observable
-    serverUrl: string = "http://localhost:7777";
+    serverUrl: string = window.localStorage["HOST_URL"];
 
-    @action
-    setServerUrl(url: string) {
-        this.serverUrl = url;
-    }
 
     @action
     setLocaleMenuVisibility(isVisible: boolean) {
@@ -37,18 +33,15 @@ class CommonStore {
 
     @action
     async initialServerUrl() {
-        axios.get("serverConfig.json")
+        await axios.get("serverConfig.json")
             .then(response => {
-                this.setServerUrl(response.data.serverUrl);
+                window.localStorage['HOST_URL'] = response.data.serverUrl;
             })
             .catch(error => {
-                console.error(error);
+                console.error("error: " + error);
                 this.setSnackbarMessage("intl_get_serverUrl_fail", "error");
             })
-
     }
-
-
 
     @action
     openLocaleChooseMenu(element: EventTarget & HTMLDivElement) {

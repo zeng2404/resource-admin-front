@@ -1,11 +1,15 @@
 import {action, observable} from "mobx";
 import {TagEntity, TagInsertRequestBody, TagUpdateRequestBody} from "../types";
 import {stringUtils} from "../utils";
-import stores from "./index";
 import {corsPostRequestBody, corsPutRequestBody, corsRequestBody} from "../constants";
 import axios from "axios";
+import CommonStore from "./commonStore";
 
 export default class TagStore {
+    commonStore: CommonStore;
+    constructor(commonStore: CommonStore) {
+        this.commonStore = commonStore;
+    }
     @observable
     tagSaveDialogVisibility: boolean = false;
     @observable
@@ -23,7 +27,7 @@ export default class TagStore {
     @observable
     condition: string = "";
     @observable
-    conditionType: string = "";
+    conditionType: string = "all";
     @observable
     tableData: TagEntity[] = [];
     @observable
@@ -45,20 +49,8 @@ export default class TagStore {
     }
 
     @action
-    handleConditionInputKeyDown(charCode: number, inputValue: string) {
-        if(charCode === 13) {
-            if(this.currentPageNumber !== 0) {
-                this.currentPageNumber = 0;
-            }
-            else {
-                this.getTableData();
-            }
-        }
-    }
-
-    @action
     setTagEditDialogVisibility(isVisible: boolean, currentHandleTag: TagEntity | undefined) {
-        if(isVisible) {
+        if (isVisible) {
             this.tagEditDialogErrorArray = [];
         }
         this.tagEditDialogVisibility = isVisible;
@@ -73,10 +65,9 @@ export default class TagStore {
 
     @action
     handleDeleteDialogSubmit() {
-        if(this.currentHandleTag) {
+        if (this.currentHandleTag) {
             this.deleteTag([this.currentHandleTag.id]);
-        }
-        else {
+        } else {
             this.batchDeleteTag();
         }
         this.setTagDeleteDialogVisibility(false, undefined);
@@ -126,44 +117,42 @@ export default class TagStore {
     }
 
     @action
+    submitQuery(conditon: string) {
+        this.condition = conditon;
+        this.getTableData();
+    }
+
+    @action
     deleteTag(tagIds: Array<string | number>) {
         const ids: string = tagIds.join(",");
-        const url = [stores.commonStore.serverUrl, this.path, ids].join("/");
+        const url = [this.commonStore.serverUrl, this.path, ids].join("/");
         axios.delete(url, corsRequestBody)
             .then(response => {
                 const statusCode = response.data.statusCode;
                 if (statusCode === 200) {
-                    stores.commonStore.setSnackbarMessage("common.deleteSuccess", "success");
-                    if (this.currentPageNumber !== 0 && this.currentPageNumber === (this.dataCount / this.pageSize)) {
-                        if (tagIds.length >= this.dataCount % this.pageSize) {
-                            this.currentPageNumber -= 1;
-                        }
-                    }
-                    else {
-                        this.getTableData();
-                    }
+                    this.commonStore.setSnackbarMessage("common.deleteSuccess", "success");
+                    this.getTableData();
                 } else {
-                    stores.commonStore.setSnackbarMessage("tag.deleteFail", "error");
+                    this.commonStore.setSnackbarMessage("common.deleteFail", "error");
                 }
             })
             .catch(error => {
                 console.error(error);
-                stores.commonStore.setSnackbarMessage("tag.deleteFail", "error");
+                this.commonStore.setSnackbarMessage("common.deleteFail", "error");
             })
     }
 
 
     @action
-    async updateTag(tag: TagUpdateRequestBody) {
+    updateTag(tag: TagUpdateRequestBody) {
         if (stringUtils.isNullOrEmpty(tag.tagName.trim()) ||
             stringUtils.hasStr(tag.tagName, ",") ||
             stringUtils.hasStr(tag.tagName, "，")
         ) {
             this.tagEditDialogErrorArray.push("tagName");
-        }
-        else {
-            if(this.currentHandleTag) {
-                const url = [stores.commonStore.serverUrl, this.path, this.currentHandleTag.id].join("/");
+        } else {
+            if (this.currentHandleTag) {
+                const url = [this.commonStore.serverUrl, this.path, this.currentHandleTag.id].join("/");
 
                 const requestBody = {
                     handleType: "updateTag",
@@ -174,18 +163,18 @@ export default class TagStore {
                     .then(response => {
                         const statusCode = response.data.statusCode;
                         if (statusCode === 601) {
-                            stores.commonStore.setSnackbarMessage("tag.duplicatedError", "error");
+                            this.commonStore.setSnackbarMessage("tag.duplicatedError", "error");
                         } else if (statusCode === 200) {
                             this.setTagEditDialogVisibility(false, undefined);
-                            stores.commonStore.setSnackbarMessage("common.editSuccess", "success");
+                            this.commonStore.setSnackbarMessage("common.editSuccess", "success");
                             this.getTableData();
                         } else {
-                            stores.commonStore.setSnackbarMessage("tag.editFail", "error");
+                            this.commonStore.setSnackbarMessage("tag.editFail", "error");
                         }
                     })
                     .catch(error => {
                         console.error(error);
-                        stores.commonStore.setSnackbarMessage("tag.editFail", "error");
+                        this.commonStore.setSnackbarMessage("tag.editFail", "error");
                     })
 
             }
@@ -194,38 +183,41 @@ export default class TagStore {
     }
 
     @action
-    async saveInsertForm(tag: TagInsertRequestBody) {
+    saveInsertForm(tag: TagInsertRequestBody) {
         if (stringUtils.isNullOrEmpty(tag.tagName.trim()) ||
             stringUtils.hasStr(tag.tagName, ",") ||
             stringUtils.hasStr(tag.tagName, "，")
         ) {
             this.tagSaveDialogErrorArray.push("tagName");
         } else {
-            const url = [stores.commonStore.serverUrl, this.path].join("/");
+            const url = [this.commonStore.serverUrl, this.path].join("/");
             axios.post(url, tag, corsPostRequestBody)
                 .then(response => {
                     const statusCode = response.data.statusCode;
                     if (statusCode === 601) {
-                        stores.commonStore.setSnackbarMessage("tag.duplicatedError", "error");
+                        this.commonStore.setSnackbarMessage("tag.duplicatedError", "error");
                     } else if (statusCode === 200) {
                         this.changeTagSaveDialogVisibilityStatus(false);
-                        this.currentPageNumber = 0;
-                        // this.getTableData();
-                        stores.commonStore.setSnackbarMessage("common.addSuccess", "success");
+                        if (this.currentPageNumber !== 0) {
+                            this.currentPageNumber = 0;
+                        } else {
+                            this.getTableData();
+                        }
+                        this.commonStore.setSnackbarMessage("common.addSuccess", "success");
                     } else {
-                        stores.commonStore.setSnackbarMessage("tag.addFail", "error");
+                        this.commonStore.setSnackbarMessage("tag.addFail", "error");
                     }
                 })
                 .catch(error => {
                     console.error(error);
-                    stores.commonStore.setSnackbarMessage("tag.addFail", "error");
+                    this.commonStore.setSnackbarMessage("tag.addFail", "error");
                 });
         }
     }
 
     @action
-    async getTableData() {
-        const url = [stores.commonStore.serverUrl, this.path].join("/");
+    getTableData() {
+        const url = [this.commonStore.serverUrl, this.path].join("/");
         const requestConfig = {
             params: {
                 condition: this.condition,
@@ -244,12 +236,12 @@ export default class TagStore {
                     this.tableData = response.data.data;
                     this.selection = [];
                 } else {
-                    stores.commonStore.setSnackbarMessage("tag.getDataFail", "error");
+                    this.commonStore.setSnackbarMessage("tag.getDataFail", "error");
                 }
             })
             .catch(error => {
                 console.error(error);
-                stores.commonStore.setSnackbarMessage("tag.getDataFail", "error");
+                this.commonStore.setSnackbarMessage("tag.getDataFail", "error");
             })
 
     }

@@ -24,9 +24,30 @@ const zh_CN: ILocale = {
         queryConditionLabel: "查询条件",
         queryConditionPlaceholder: "请输入查询条件",
         queryOptionLabel: "查询类型",
+        allConditionType: "全部",
+        addFail: "添加失败",
+        copyFabTip: "复制",
+        editFail: "修改失败",
+        deleteDialogTip: "你确定要删除 ",
+        searchFabTip: "查询",
     },
     bookmark: {
         title: "书签管理",
+        addDialogTitle: "添加书签",
+        deleteDialogTitle: "删除书签",
+        editDialogTitle: "修改书签",
+        bookmarkDescription: "书签描述",
+        bookmarkDescriptionLabel: "书签描述*",
+        bookmarkUrlLabel: "书签URL*",
+        bookmarkUrl: "书签URL",
+        bookmarkUrlEmptyErrorTip: "书签URL不能为空",
+        bookmarkDescriptionEmptyErrorTip: "书签描述不能为空",
+        tag: "标签",
+        getTagMenuFail: "获取标签菜单失败",
+        getDataFail: "获取书签信息失败",
+        copyURLFabTip: "复制链接",
+        jumpToURLFabTip: "链接跳转",
+        batchDeleteDialogTip: "你确定要删除选中的书签么?"
     },
     tag: {
         title: "标签管理",
@@ -42,7 +63,6 @@ const zh_CN: ILocale = {
         getDataFail: "获取标签数据失败",
         jumpToBookmark: "跳转到书签",
         batchDeleteDialogTip: "你确定要删除选中的标签么?",
-        deleteDialogTip: "你确定要删除 ",
         editFail: "修改标签失败",
     }
 };

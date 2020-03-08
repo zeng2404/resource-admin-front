@@ -10,6 +10,7 @@ export interface CommonIntlProps {
     batchDeleteFabTip: string;
     getServerUrlFail: string;
     addSuccess: string;
+    addFail: string;
     createTime: string;
     lastUpdateTime: string;
     action: string;
@@ -21,10 +22,30 @@ export interface CommonIntlProps {
     queryConditionLabel: string;
     queryConditionPlaceholder: string;
     queryOptionLabel: string;
+    allConditionType: string;
+    copyFabTip: string;
+    editFail: string;
+    deleteDialogTip: string;
+    searchFabTip: string;
 }
 
 export interface BookmarkIntlProps {
     title: string;
+    addDialogTitle: string;
+    deleteDialogTitle: string;
+    editDialogTitle: string;
+    bookmarkDescription: string;
+    bookmarkDescriptionLabel: string;
+    bookmarkUrl: string;
+    bookmarkUrlLabel: string;
+    bookmarkDescriptionEmptyErrorTip: string;
+    bookmarkUrlEmptyErrorTip: string;
+    tag: string;
+    getTagMenuFail: string;
+    getDataFail: string;
+    copyURLFabTip: string;
+    jumpToURLFabTip: string;
+    batchDeleteDialogTip: string;
 }
 
 export interface TagIntlProps {
@@ -41,7 +62,6 @@ export interface TagIntlProps {
     getDataFail: string;
     jumpToBookmark: string;
     batchDeleteDialogTip: string;
-    deleteDialogTip: string;
     editFail: string;
 
 }
