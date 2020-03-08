@@ -7,9 +7,11 @@ import CommonStore from "./commonStore";
 
 export default class TagStore {
     commonStore: CommonStore;
+
     constructor(commonStore: CommonStore) {
         this.commonStore = commonStore;
     }
+
     @observable
     tagSaveDialogVisibility: boolean = false;
     @observable
@@ -117,9 +119,13 @@ export default class TagStore {
     }
 
     @action
-    submitQuery(conditon: string) {
-        this.condition = conditon;
-        this.getTableData();
+    submitQuery(condition: string) {
+        this.condition = condition;
+        if (this.currentPageNumber != 0) {
+            this.currentPageNumber = 0;
+        } else {
+            this.getTableData();
+        }
     }
 
     @action

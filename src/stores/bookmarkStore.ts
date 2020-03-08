@@ -181,6 +181,15 @@ class BookmarkStore {
     }
 
     @action
+    handleSearchButtonClick() {
+        if (this.currentPageNumber !== 0) {
+            this.currentPageNumber = 0;
+        } else {
+            this.getTableData();
+        }
+    }
+
+    @action
     getTableData() {
         const url = [this.commonStore.serverUrl, this.path].join("/");
         const requestConfig = {

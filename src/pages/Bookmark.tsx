@@ -512,7 +512,7 @@ const Bookmark: React.FunctionComponent<IStore> = (props: IStore) => {
                                          className={classes.searchButton}>
                                     <Fab size={"small"}>
                                         <Search onClick={() => {
-                                            store.getTableData();
+                                            store.handleSearchButtonClick();
                                         }}/>
                                     </Fab>
                                 </Tooltip>
