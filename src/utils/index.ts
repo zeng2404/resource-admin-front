@@ -34,8 +34,10 @@ export const getIntlMessage = (intl: IntlShape, intlIds: string[]): string[] => 
 
 
 export const formatDateTime = (dateString: string) => {
-    const d = new Date(dateString);
-    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    const arr: string[] = dateString.split(/[- : T.]/);
+    const dateDelimiter = "-";
+    const timeDelimiter = ":"
+    return [arr[0], arr[1], arr[2]].join(dateDelimiter) + " " + [arr[3], arr[4], arr[5]].join(timeDelimiter);
 };
 
 

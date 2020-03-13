@@ -84,7 +84,6 @@ class BookmarkStore {
 
     @action
     setCondition(condition: string) {
-        console.log(condition);
         this.condition = condition;
     }
 
@@ -176,7 +175,6 @@ class BookmarkStore {
 
     @action
     copy(copyContent: string) {
-        console.log(copyContent);
         copy(copyContent);
     }
 
